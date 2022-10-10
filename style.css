@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: url("img/bars-background.jpg");
 }
 
 .information-content {
@@ -63,6 +64,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: url("img/bars-background.jpg");
 }
 
 .game-content {
@@ -72,22 +74,46 @@
 
 .top-bar-game-content {
     height: 10vh;
-    background-color: yellow;
-    border: 2px dashed grey;
+    background-image: url("img/bars-background.jpg");
+    border: 2px solid black;
 }
 
 .pet-game-content {
     display: flex;
     height: 75vh;
-    background-color: lightblue;
+    background-image: url("img/background -pet.png");
+    background-size: 790px;
+    border: 3px solid black;
+    background-position: center;
     align-items: center;
     justify-content: center;
 }
 
 .bottom-bar-game-content {
     height: 12vh;
-    background-color: yellow;
-    border: 2px dashed grey;
+    background-image: url("img/bars-background.jpg");
+    border: 2px solid black;
+}
+
+.action-buttons {
+    display: inline-flex;
+    border: 2px solid green;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-left: 18%;
+    margin-right: 30%;
+    margin-top: 4%;
+}
+
+.action-button {
+    padding: 20px 35px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-right: 1px solid grey;
+    background: whitesmoke;
+    font-family: 'Courier New', Courier, monospace;
+    margin: auto;
 }
 
 .clock-top-bar {
