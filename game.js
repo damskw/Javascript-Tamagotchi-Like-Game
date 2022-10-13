@@ -7,7 +7,7 @@ function initGame() {
 }
 
 function refreshTime() {
-    const timeDisplay = document.getElementById("time");
+    const timeDisplay = document.querySelector("#time");
     const dateString = new Date().toLocaleString();
     const formattedString = dateString.replace(", ", " - ");
     timeDisplay.textContent = formattedString;
