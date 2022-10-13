@@ -39,6 +39,14 @@ function initGame() {
 
 }
 
+function setPetHunger() {
+
+}
+
+function endGame() {
+
+}
+
 function refreshTime() {
     const timeDisplay = document.querySelector("#time");
     const dateString = new Date().toLocaleString();
