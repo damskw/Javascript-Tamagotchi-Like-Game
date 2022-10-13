@@ -31,22 +31,25 @@
         </div>
         <div class="game-content">
             <div class="top-bar-game-content">
-                <div class="clock-top-bar">22:12</div>
+                <div class="clock-top-bar"><h1><span id="time"></span></h1>
+                    <script src="game.js">
+                        var datetime = new Date();
+                        console.log(datetime);
+                        document.getElementById("time").textContent = datetime;
+                    </script></div>
             </div>
             <div class="pet-game-content">
                 <div class="pet-body">
-                    <svg height="100" width="100">
-                        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-                      </svg>
+                    <img src="img/Pet.png" alt="pet-body">
                 </div>
             </div>
             <div class="bottom-bar-game-content">
                 <div class="action-buttons">
-                    <div class="action-button"></div>
-                    <div class="action-button"></div>
-                    <div class="action-button"></div>
-                    <div class="action-button"></div>
-                    <div class="action-button"></div>
+                    <div class="action-button"><img src="img/Tree1.png" alt="Go-for-a-walk"></div>
+                    <div class="action-button"><img src="img/Toilet1.png" alt="Toilet"></div>
+                    <div class="action-button"><img src="img/Games.png" alt="Games"></div>
+                    <div class="action-button"><img src="img/Sleep.png" alt="Sleep"></div>
+                    <div class="action-button"><img src="img/Shower.png" alt="Sleep"></div>
                 </div>
             </div>
         </div>
