@@ -125,15 +125,18 @@
     touch-action: manipulation;
     }
   
-    .action-button:hover {
+.action-button:hover {
     background-color: #93C199;
-    }
+}
   
-    .action-button:active {
+.action-button:active {
     box-shadow: #422800 2px 2px 0 0;
     transform: translate(2px, 2px);
-    }
+}
   
+.action-button > img {
+    scale: 1.40;
+}
 
 .time {
     font-size: 2em;
