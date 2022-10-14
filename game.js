@@ -30,6 +30,13 @@ const game = {
     }
 }
 
+const pet = {
+    happiness: 0,
+    sleepiness: 0,
+    cleanliness: 0,
+    needs: 0,
+}
+
 function initDragAndDrop () {
 
 }
