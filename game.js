@@ -30,12 +30,27 @@ const game = {
     }
 }
 
+const pet = {
+    happiness: 0,
+    sleepiness: 0,
+    cleanliness: 0,
+    needs: 0,
+}
+
 function initDragAndDrop () {
 
 }
 
 function initGame() {
     // Your game can start here, but define separate functions, don't write everything in here :)
+
+}
+
+function setPetHunger() {
+
+}
+
+function endGame() {
 
 }
 

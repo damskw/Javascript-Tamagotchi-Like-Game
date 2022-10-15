@@ -146,7 +146,9 @@
     height: 6vh;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 3em;
-    width: 85%;
+    width: 100%;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 .action-button {
@@ -156,27 +158,26 @@
     box-shadow: #422800 4px 4px 0 0;
     color: #422800;
     cursor: pointer;
-    display: inline-block;
-    font-weight: 600;
-    font-size: 45px;
-    padding: 0 30px;
-    line-height: 50px;
-    text-align: center;
-    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
     }
   
-    .action-button:hover {
+.action-button:hover {
     background-color: #93C199;
-    }
+}
   
-    .action-button:active {
+.action-button:active {
     box-shadow: #422800 2px 2px 0 0;
     transform: translate(2px, 2px);
-    }
+}
   
+.action-button > img {
+    scale: 1.40;
+}
 
 .time {
     font-size: 2em;
@@ -190,14 +191,20 @@
 .inventory-items {
     height: 90vh;
     width: 85%;
-    display: grid;
+    display: inline-grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 2em;
     margin: auto;
     margin-bottom: 1em;
 }
 
+.inventory-items img {
+    scale: 4;
+}
 
 .inventory-item {
     border: 2px dashed grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
