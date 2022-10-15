@@ -17,6 +17,7 @@ const inventoryBarTitle = document.querySelector("#inventory-bar");
 
 const game = {
     init: function () {
+        undragImages();
         initGame();
         initDragAndDrop();
     },
@@ -45,6 +46,17 @@ const pet = {
 function initGame() {
     // Your game can start here, but define separate functions, don't write everything in here :)
 
+}
+
+function undragImages() {
+    const actionImages = document.querySelectorAll(".action-button > img");
+    actionImages.forEach(image => {
+        image.setAttribute("draggable", false);
+    })
+    const statusImages = document.querySelectorAll(".status-slot > img");
+    statusImages.forEach(image => {
+        image.setAttribute("draggable", false);
+    })
 }
 
 function initDragAndDrop() {
