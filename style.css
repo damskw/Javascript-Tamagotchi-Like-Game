@@ -25,6 +25,8 @@
     padding-left: 1em;
     border-radius: 1em;
     margin-bottom: 1em;
+    justify-content: center;
+    align-items: center;
 }
 
 .menu-content > div {
@@ -33,19 +35,31 @@
 
 .menu-content > div > h3 {
     margin-right: 0.2em;
+    
+}
+
+.settings {
+    width: 80%;
+    height: 30%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .menu-bar, .inventory-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 15vh;
-    width: 85%;
+    height: 10vh;
+    width: 100%;
 }
 
 #menu-bar, #inventory-bar {
     width: 100%;
-    border: 2px dashed black;
+    border: 1px dashed black;
     font-family: cursive;
     padding: 0.3em;
     border-radius: 1em;
@@ -75,7 +89,36 @@
 .top-bar-game-content {
     height: 10vh;
     background-image: url("img/bars-background.jpg");
-    border: 2px solid black;
+    border: 1px solid black;
+}
+
+.status-slots {
+    display: grid;
+    height: 6vh;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 3em;
+    width: 100%;
+    height: 100%;
+    justify-content: center
+}
+
+.happiness-status {
+    display: flex;
+    border-right: 1px solid black;
+    justify-content: center;
+}
+
+.hunger-status {
+    display: flex;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    justify-content: center;
+}
+
+.toilet-status {
+    display: flex;
+    border-left: 1px solid black;
+    justify-content: center;
 }
 
 .pet-game-content {
@@ -83,7 +126,7 @@
     height: 75vh;
     background-image: url("img/background -pet.png");
     background-size: 100%;
-    border: 3px solid black;
+    border: 4px solid black;
     background-position: center;
     align-items: center;
     justify-content: center;
@@ -92,7 +135,7 @@
 .bottom-bar-game-content {
     height: 12vh;
     background-image: url("img/bars-background.jpg");
-    border: 2px solid black;
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
