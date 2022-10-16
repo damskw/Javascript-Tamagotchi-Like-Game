@@ -111,6 +111,8 @@
 .game-content {
     height: 100%;
     width: 55%;
+    display: flex;
+    flex-direction: column;
 }
 
 .inventory-container {
@@ -122,13 +124,8 @@
     background-image: url("img/bars-background.jpg");
 }
 
-.game-content {
-    display: flex;
-    flex-direction: column;
-}
-
 .top-bar-game-content {
-    height: 10vh;
+    height: 10%;
     background-image: url("img/bars-background.jpg");
     border: 1px solid black;
 }
@@ -143,20 +140,20 @@
     justify-content: center
 }
 
-.happiness-status {
+#happiness-status {
     display: flex;
     border-right: 1px solid black;
     justify-content: center;
 }
 
-.hunger-status {
+#hunger-status {
     display: flex;
     border-right: 1px solid black;
     border-left: 1px solid black;
     justify-content: center;
 }
 
-.toilet-status {
+#toilet-status {
     display: flex;
     border-left: 1px solid black;
     justify-content: center;
@@ -164,17 +161,18 @@
 
 .pet-game-content {
     display: flex;
-    height: 75vh;
+    height: 77%;
     background-image: url("img/background -pet.png");
-    background-size: 100%;
+    background-size: 120%;
     border: 4px solid black;
     background-position: center;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .bottom-bar-game-content {
-    height: 12vh;
+    height: 13%;
     background-image: url("img/bars-background.jpg");
     border: 1px solid black;
     display: flex;
@@ -248,4 +246,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+.pet-body {
+    height: 90%;
+}
+
+.message-box {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }

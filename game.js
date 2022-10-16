@@ -14,7 +14,6 @@ const inventoryBarTitle = document.querySelector("#inventory-bar");
 
 
 
-
 const game = {
     init: function () {
         undragImages();
@@ -34,12 +33,14 @@ const gameEnvironment = {
     inventoryItems: null,
     inventoryContainer: null,
     petBackground: null,
+    inGameMessage: null,
 }
 
 const pet = {
     happiness: 0,
     sleepiness: 0,
     cleanliness: 0,
+    hunger: 0,
     needs: 0,
 }
 
@@ -69,6 +70,7 @@ function initElements() {
     gameEnvironment.inventoryContainer = document.querySelector(".inventory-items");
     gameEnvironment.inventoryItems = document.querySelectorAll(".inventory-item");
     gameEnvironment.petBackground = document.querySelector(".pet-game-content");
+    gameEnvironment.inGameMessage = document.querySelector("#in-game-message");;
 }
 
 function initDragEvents() {
@@ -135,11 +137,17 @@ function handleDragLeave(e) {
 
 function handleDrop(e) {
     e.preventDefault();
+    gameEnvironment.inGameMessage.innerText = "You've fed the pet!"
+    setTimeout(clearInGameMessage, 5000);
 }
 
 
 function restorePetBackgroundDefaults() {
     gameEnvironment.petBackground.style.border = "4px solid black";
+}
+
+function clearInGameMessage() {
+    gameEnvironment.inGameMessage.innerText = "";
 }
 
 
