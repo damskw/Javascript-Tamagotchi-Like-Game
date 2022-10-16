@@ -58,6 +58,8 @@ function undragImages() {
     statusImages.forEach(image => {
         image.setAttribute("draggable", false);
     })
+    const petImage = document.querySelector(".pet-body > img");
+    petImage.setAttribute("draggable", false);
 }
 
 function initDragAndDrop() {
