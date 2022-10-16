@@ -3,8 +3,9 @@
     width: 90%;
     height: 80vh;
     display: flex;
-    margin: auto;
+    margin-left: 5vw;
     margin-top: 10vh;
+    position: fixed;
 }
 
 .menu-container {
@@ -21,10 +22,11 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    border: 2px dashed black;
-    padding-left: 1em;
+    padding-left: 0em;
     border-radius: 1em;
     margin-bottom: 1em;
+    justify-content: center;
+    align-items: center;
 }
 
 .menu-content > div {
@@ -33,29 +35,85 @@
 
 .menu-content > div > h3 {
     margin-right: 0.2em;
+    
 }
 
-.menu-bar, .inventory-bar {
+.settings {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: 2em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings-button {
+    width: 75%;
+    height: 100%;
+    background-color: white;
+    border: 2px solid #422800;
+    border-radius: 30px;
+    box-shadow: #422800 4px 4px 0 0;
+    color: #422800;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    }
+
+.settings-button:hover {
+    background-color: #93C199;
+}
+      
+.settings-button:active {
+    box-shadow: #422800 2px 2px 0 0;
+    transform: translate(2px, 2px);
+}
+
+.pet-informations {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-bar, .inventory-bar, .pet-informations-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 15vh;
-    width: 85%;
+    height: 11vh;
+    width: 100%;
 }
 
-#menu-bar, #inventory-bar {
-    width: 100%;
-    border: 2px dashed black;
-    font-family: cursive;
-    padding: 0.3em;
-    border-radius: 1em;
+#menu-bar, #inventory-bar, #pet-informations-bar {
+    width: 80%;
+    height: 65%;
+    background-color: #422800;
+    border: 2px solid white;
+    border-radius: 30px;
+    box-shadow: #422800 4px 4px 0 0;
+    color: white;
     display: flex;
     justify-content: center;
+    align-items: center;
+    font-family: cursive;
 }
 
 .game-content {
     height: 100%;
     width: 55%;
+    display: flex;
+    flex-direction: column;
 }
 
 .inventory-container {
@@ -67,32 +125,56 @@
     background-image: url("img/bars-background.jpg");
 }
 
-.game-content {
-    display: flex;
-    flex-direction: column;
+.top-bar-game-content {
+    height: 10%;
+    background-image: url("img/bars-background.jpg");
+    border: 1px solid black;
 }
 
-.top-bar-game-content {
-    height: 10vh;
-    background-image: url("img/bars-background.jpg");
-    border: 2px solid black;
+.status-slots {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 3em;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+#happiness-status {
+    display: flex;
+    border-right: 1px solid black;
+    justify-content: center;
+}
+
+#hunger-status {
+    display: flex;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    justify-content: center;
+}
+
+#toilet-status {
+    display: flex;
+    border-left: 1px solid black;
+    justify-content: center;
 }
 
 .pet-game-content {
     display: flex;
-    height: 75vh;
+    height: 77%;
     background-image: url("img/background -pet.png");
-    background-size: 100%;
-    border: 3px solid black;
+    background-size: 120%;
+    border: 4px solid black;
     background-position: center;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .bottom-bar-game-content {
-    height: 12vh;
+    height: 13%;
     background-image: url("img/bars-background.jpg");
-    border: 2px solid black;
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,7 +193,7 @@
 .action-button {
     background-color: white;
     border: 2px solid #422800;
-    border-radius: 30px;
+    border-radius: 3em;
     box-shadow: #422800 4px 4px 0 0;
     color: #422800;
     cursor: pointer;
@@ -164,4 +246,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+.pet-body {
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.message-box {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.message-box h1 {
+    visibility: hidden;
 }
