@@ -3,8 +3,9 @@
     width: 90%;
     height: 80vh;
     display: flex;
-    margin: auto;
+    margin-left: 5vw;
     margin-top: 10vh;
+    position: fixed;
 }
 
 .menu-container {
@@ -132,7 +133,6 @@
 
 .status-slots {
     display: grid;
-    height: 6vh;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 3em;
     width: 100%;
@@ -252,6 +252,7 @@
 .pet-body {
     height: 90%;
 }
+
 
 .message-box {
     height: 10%;

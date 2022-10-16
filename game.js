@@ -127,7 +127,7 @@ function handleDragEnter(e) {
 function handleDragOver(e) {
     e.preventDefault();
     const dropzone = e.currentTarget;
-    dropzone.style.border = "5px solid green";
+    dropzone.style.border = "4px solid green";
 }
 
 function handleDragLeave(e) {
