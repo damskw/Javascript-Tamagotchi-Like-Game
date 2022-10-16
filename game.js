@@ -58,6 +58,8 @@ function undragImages() {
     statusImages.forEach(image => {
         image.setAttribute("draggable", false);
     })
+    const petImage = document.querySelector(".pet-body > img");
+    petImage.setAttribute("draggable", false);
 }
 
 function initDragAndDrop() {
@@ -137,6 +139,7 @@ function handleDragLeave(e) {
 
 function handleDrop(e) {
     e.preventDefault();
+    gameEnvironment.inGameMessage.style.visibility = "visible";
     gameEnvironment.inGameMessage.innerText = "You've fed the pet!"
     setTimeout(clearInGameMessage, 5000);
 }
@@ -147,7 +150,8 @@ function restorePetBackgroundDefaults() {
 }
 
 function clearInGameMessage() {
-    gameEnvironment.inGameMessage.innerText = "";
+    gameEnvironment.inGameMessage.innerText = ".";
+    gameEnvironment.inGameMessage.style.visibility = "hidden";
 }
 
 
