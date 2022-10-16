@@ -81,8 +81,22 @@
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: 2em;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.information {
+    width: 75%;
+    height: 60%;
+    background-color: white;
+    border: 2px solid #422800;
+    border-radius: 30px;
+    box-shadow: #422800 4px 4px 0 0;
+    color: #422800;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -138,26 +152,50 @@
     width: 100%;
     height: 100%;
     justify-content: center;
+    align-items: center;
 }
 
 #happiness-status {
-    display: flex;
-    border-right: 1px solid black;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
     justify-content: center;
 }
 
 #hunger-status {
-    display: flex;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
     justify-content: center;
 }
 
 #toilet-status {
-    display: flex;
-    border-left: 1px solid black;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
     justify-content: center;
 }
+
+.progress-bar {
+    width: 80%;
+    height: 30%;
+    margin-top: 1.2em;
+    margin-bottom: 1em;
+    border-radius: 5em;
+    border: 2px solid #422800;
+    overflow: hidden;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-bar span {
+    height: 100%;
+    display: block;
+    width: 0;
+    color: rgb(255, 251, 251);
+    line-height: 30px;
+    position: absolute;
+    text-align: end;
+    padding-right: 5px;
+  }
 
 .pet-game-content {
     display: flex;
@@ -242,7 +280,11 @@
 }
 
 .inventory-item {
-    border: 2px dashed grey;
+    background-color: white;
+    border: 2px solid #422800;
+    border-radius: 30px;
+    box-shadow: #422800 4px 4px 0 0;
+    color: #422800;
     display: flex;
     justify-content: center;
     align-items: center;
