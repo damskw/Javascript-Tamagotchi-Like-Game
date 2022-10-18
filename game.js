@@ -11,14 +11,20 @@ const actionButtons = document.querySelectorAll(".action-button");
 const inventoryBar = document.querySelector(".inventory-bar");
 const inventoryBarTitle = document.querySelector("#inventory-bar");
 
+const petHungerLoseValue = 100;
+const petCleanlinessLoseValue = 0;
+const petNeedsLoseValue = 100;
+
 
 
 
 const game = {
     init: function () {
+        setPetStartingValues();
+        initMenuButtons();
         undragImages();
-        initGame();
         initDragAndDrop();
+        game.running();
     },
     running: function () {
         setPetHunger();
@@ -36,17 +42,61 @@ const gameEnvironment = {
     inGameMessage: null,
 }
 
+const gameWindow = {
+    setDayButton: null,
+    setNightButton: null,
+    musicButton: null,
+    resetButton: null,
+}
+
 const pet = {
-    happiness: 0,
+    happiness: 100,
     sleepiness: 0,
-    cleanliness: 0,
+    cleanliness: 100,
     hunger: 0,
     needs: 0,
 }
 
-function initGame() {
-    // Your game can start here, but define separate functions, don't write everything in here :)
+const player = {
+    name: null,
+}
 
+
+function initMenuButtons() {
+    assignMenuButtons();
+    activateMenuButtons();
+    addTestEndGameButton();
+}
+
+
+function assignMenuButtons() {
+    gameWindow.setDayButton = document.querySelector("#set-day-button");
+    gameWindow.setNightButton = document.querySelector("#set-night-button");
+    gameWindow.musicButton = document.querySelector("#music-button");
+    gameWindow.resetButton = document.querySelector("#reset-button");
+}
+
+function activateMenuButtons() {
+    gameWindow.resetButton.addEventListener("click", resetGame);
+}
+
+function addTestEndGameButton() {
+    gameWindow.musicButton.addEventListener("click", game.end);
+}
+
+
+function resetGame() {
+    clearInGameMessage();
+    restorePetBackgroundDefaults();
+    game.init();
+}
+
+function setPetStartingValues() {
+    pet.happiness = 0;
+    pet.sleepiness = 0;
+    pet.cleanliness = 0;
+    pet.hunger = 0;
+    pet.needs = 0;
 }
 
 function undragImages() {
@@ -83,6 +133,12 @@ function initDragEvents() {
     initDropBack(gameEnvironment.inventoryContainer);
 }
 
+function removeDragEvents() {
+    gameEnvironment.inventoryItems.forEach(function (card) {
+        removeDraggable(card);
+    })
+}
+
 function initDropZone(element) {
     element.addEventListener("dragenter", handleDragEnter);
     element.addEventListener("dragover", handleDragOver);
@@ -90,9 +146,21 @@ function initDropZone(element) {
     element.addEventListener("drop", handleDrop);
 }
 
+function removeDropZone(element) {
+    element.removeEventListener("dragenter", handleDragEnter);
+    element.removeEventListener("dragover", handleDragOver);
+    element.removeEventListener("dragleave", handleDragLeave);
+    element.removeEventListener("drop", handleDrop);
+}
+
 function initDropBack(element) {
     element.addEventListener("dragover", handleBackDragOver);
     element.addEventListener("drop", handleBackDrop);
+}
+
+function removeDropBack(element) {
+    element.removeEventListener("dragover", handleBackDragOver);
+    element.removeEventListener("drop", handleBackDrop); 
 }
 
 
@@ -122,6 +190,12 @@ function initDraggable(item) {
     item.addEventListener("dragend", handleDragEnd);
 }
 
+function removeDraggable(item) {
+    item.setAttribute("draggable", false);
+    item.removeEventListener("dragstart", handleDragStart);
+    item.removeEventListener("dragend", handleDragEnd);
+}
+
 function handleDragEnter(e) {
 
 }
@@ -130,6 +204,7 @@ function handleDragOver(e) {
     e.preventDefault();
     const dropzone = e.currentTarget;
     dropzone.style.border = "4px solid green";
+    dropzone.style.opacity = "75%";
 }
 
 function handleDragLeave(e) {
@@ -141,12 +216,14 @@ function handleDrop(e) {
     e.preventDefault();
     gameEnvironment.inGameMessage.style.visibility = "visible";
     gameEnvironment.inGameMessage.innerText = "You've fed the pet!"
+    restorePetBackgroundDefaults();
     setTimeout(clearInGameMessage, 5000);
 }
 
 
 function restorePetBackgroundDefaults() {
     gameEnvironment.petBackground.style.border = "4px solid black";
+    gameEnvironment.petBackground.style.opacity = "100%";
 }
 
 function clearInGameMessage() {
@@ -156,20 +233,28 @@ function clearInGameMessage() {
 
 
 function setPetHunger() {
+    petHungerInterval = setInterval(() => {
+        pet.hunger += 10;
+        gameEnvironment.inGameMessage.style.visibility = "visible";
+        gameEnvironment.inGameMessage.innerText = `Pet hunger: ${pet.hunger}`;
+    }, 2000);
+}
 
+
+function clearOnRunningIntervals() {
+    clearInterval(petHungerInterval);
 }
 
 function endGame() {
-
+    gameEnvironment.inGameMessage.style.visibility = "visible";
+    gameEnvironment.inGameMessage.innerText = "You've reached critical values, game has ended.";
+    gameEnvironment.petBackground.style.border = "4px solid red";
+    gameEnvironment.petBackground.style.opacity = "50%";
+    removeDragEvents();
+    removeDropBack(gameEnvironment.inventoryContainer);
+    removeDropZone(gameEnvironment.petBackground);
+    clearOnRunningIntervals();
 }
 
-// function refreshTime() {
-//     const timeDisplay = document.querySelector("#time");
-//     const dateString = new Date().toLocaleString();
-//     const formattedString = dateString.replace(", ", " - ");
-//     timeDisplay.textContent = formattedString;
-// }
-
-// setInterval(refreshTime, 1000);
 
 game.init();
