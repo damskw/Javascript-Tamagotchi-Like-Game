@@ -5,6 +5,8 @@ const foodAttribute = "food";
 const minHungerValueToFeed = 20;
 const fedTimesToEvolve = 5;
 const minCleanlinessValueToClean = 80;
+const addFoodValue = 10;
+const removeDirtValue = 10;
 
 
 
@@ -49,9 +51,9 @@ const gameWindow = {
 }
 
 const pet = {
-    happiness: 100,
+    happiness: 0,
     sleepiness: 0,
-    cleanliness: 100,
+    cleanliness: 0,
     hunger: 0,
     needs: 0,
     stage: 0,
@@ -115,7 +117,7 @@ function resetGame() {
 
 
 function setPetStartingValues() {
-    pet.happiness = 0;
+    pet.happiness = 100;
     pet.sleepiness = 0;
     pet.cleanliness = 100;
     pet.hunger = 0;
@@ -254,7 +256,7 @@ function handleDrop(e) {
         gameEnvironment.inGameMessage.style.visibility = "visible";
         gameEnvironment.inGameMessage.innerText = "You've fed the pet!";
         setTimeout(clearInGameMessage, 5000);
-        pet.hunger -= 10;
+        pet.hunger -= addFoodValue;
         pet.fedTimes += 1;
         if (pet.fedTimes >= fedTimesToEvolve) {
             pet.stage += 1;
@@ -271,7 +273,7 @@ function handleDrop(e) {
 
 function cleanPet() {
     if (pet.cleanliness <= minCleanlinessValueToClean) {
-        pet.cleanliness += 10;
+        pet.cleanliness += removeDirtValue;
         gameEnvironment.inGameMessage.style.visibility = "visible";
         gameEnvironment.inGameMessage.innerText = "You've cleaned your pet.";
         setTimeout(clearInGameMessage, 5000);
