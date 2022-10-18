@@ -228,7 +228,7 @@
 
 
 .inventory-items {
-    height: 90vh;
+    height: 90%;
     width: 85%;
     display: inline-grid;
     grid-template-columns: 1fr 1fr;
@@ -238,14 +238,15 @@
 }
 
 .inventory-items img {
-    scale: 4;
+    scale: 3;
 }
 
-.inventory-item {
+.inventory-items > div {
     border: 2px dashed grey;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 13vh;
 }
 
 
