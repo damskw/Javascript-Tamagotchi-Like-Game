@@ -14,6 +14,9 @@ const inventoryBarTitle = document.querySelector("#inventory-bar");
 const petHungerLoseValue = 100;
 const petCleanlinessLoseValue = 0;
 const petNeedsLoseValue = 100;
+const foodAttribute = "food";
+const minHungerValueToFeed = 20;
+const fedTimesToEvolve = 5;
 
 
 
@@ -24,13 +27,14 @@ const game = {
         initMenuButtons();
         undragImages();
         initDragAndDrop();
+        shuffleInventoryItems();
         game.running();
     },
     running: function () {
         setPetHunger();
     },
-    end: function () {
-        endGame();
+    end: function (message) {
+        endGame(message);
     }
 }
 
@@ -55,6 +59,8 @@ const pet = {
     cleanliness: 100,
     hunger: 0,
     needs: 0,
+    stage: 0,
+    fedTimes: 0,
 }
 
 const player = {
@@ -91,12 +97,15 @@ function resetGame() {
     game.init();
 }
 
+
 function setPetStartingValues() {
     pet.happiness = 0;
     pet.sleepiness = 0;
     pet.cleanliness = 0;
     pet.hunger = 0;
     pet.needs = 0;
+    pet.stage = 0;
+    pet.fedTimes = 0;
 }
 
 function undragImages() {
@@ -124,6 +133,15 @@ function initElements() {
     gameEnvironment.petBackground = document.querySelector(".pet-game-content");
     gameEnvironment.inGameMessage = document.querySelector("#in-game-message");;
 }
+
+function shuffleInventoryItems() {
+    const mixedItems = gameEnvironment.inventoryContainer.children;
+
+    for (let i = mixedItems.length; i >= 0; i--) {
+        gameEnvironment.inventoryContainer.appendChild(mixedItems[(Math.random() * i) | 0]);
+    }
+}
+
 
 function initDragEvents() {
     gameEnvironment.inventoryItems.forEach(function (card) {
@@ -173,6 +191,7 @@ function handleBackDrop(e) {
 }
 
 function handleDragStart(e) {
+    console.log(e.currentTarget);
     gameEnvironment.dragged = e.currentTarget;
     gameEnvironment.dragged.style.scale = '1.25';
 }
@@ -214,10 +233,23 @@ function handleDragLeave(e) {
 
 function handleDrop(e) {
     e.preventDefault();
-    gameEnvironment.inGameMessage.style.visibility = "visible";
-    gameEnvironment.inGameMessage.innerText = "You've fed the pet!"
+    const draggedAttribute = gameEnvironment.dragged.getAttribute("type");
+    if (draggedAttribute == foodAttribute && pet.hunger >= minHungerValueToFeed) {
+        gameEnvironment.inGameMessage.style.visibility = "visible";
+        gameEnvironment.inGameMessage.innerText = "You've fed the pet!";
+        setTimeout(clearInGameMessage, 5000);
+        pet.hunger -= 10;
+        pet.fedTimes += 1;
+        if (pet.fedTimes >= fedTimesToEvolve) {
+            pet.stage += 1;
+            pet.fedTimes = 0;
+        }
+    } else if (draggedAttribute == foodAttribute && pet.hunger < minHungerValueToFeed) {
+        gameEnvironment.inGameMessage.style.visibility = "visible";
+        gameEnvironment.inGameMessage.innerText = "Pet is not hungry yet.";
+        setTimeout(clearInGameMessage, 5000);
+    }
     restorePetBackgroundDefaults();
-    setTimeout(clearInGameMessage, 5000);
 }
 
 
@@ -234,10 +266,16 @@ function clearInGameMessage() {
 
 function setPetHunger() {
     petHungerInterval = setInterval(() => {
-        pet.hunger += 10;
+        let hungerAddValue = (Math.random() * 6) | 0
+        pet.hunger += hungerAddValue;
+        if (pet.hunger >= petHungerLoseValue) {
+            const endGameMessage = "Pet was too hungry, you lost."
+            game.end(endGameMessage);
+            return;
+        }
         gameEnvironment.inGameMessage.style.visibility = "visible";
         gameEnvironment.inGameMessage.innerText = `Pet hunger: ${pet.hunger}`;
-    }, 2000);
+    }, 1000);
 }
 
 
@@ -245,9 +283,9 @@ function clearOnRunningIntervals() {
     clearInterval(petHungerInterval);
 }
 
-function endGame() {
+function endGame(message) {
     gameEnvironment.inGameMessage.style.visibility = "visible";
-    gameEnvironment.inGameMessage.innerText = "You've reached critical values, game has ended.";
+    gameEnvironment.inGameMessage.innerText = message;
     gameEnvironment.petBackground.style.border = "4px solid red";
     gameEnvironment.petBackground.style.opacity = "50%";
     removeDragEvents();
