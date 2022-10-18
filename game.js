@@ -31,7 +31,7 @@ const game = {
         game.running();
     },
     running: function () {
-        setPetHunger();
+        // setPetHunger();
     },
     end: function (message) {
         endGame(message);
@@ -84,6 +84,8 @@ function assignMenuButtons() {
 
 function activateMenuButtons() {
     gameWindow.resetButton.addEventListener("click", resetGame);
+    gameWindow.setDayButton.addEventListener("click", setDay);
+    gameWindow.setNightButton.addEventListener("click", setNight);
 }
 
 function addTestEndGameButton() {
@@ -261,6 +263,16 @@ function restorePetBackgroundDefaults() {
 function clearInGameMessage() {
     gameEnvironment.inGameMessage.innerText = ".";
     gameEnvironment.inGameMessage.style.visibility = "hidden";
+}
+
+function setNight() {
+    const body = document.body;
+    body.style.backgroundColor = "black";
+}
+
+function setDay() {
+    const body = document.body;
+    body.style.backgroundColor = "white";
 }
 
 
