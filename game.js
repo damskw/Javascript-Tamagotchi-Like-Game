@@ -1,22 +1,10 @@
-const mainGameContainer = document.querySelector(".main-game-container");
-const menuContainer = document.querySelector(".menu-container");
-const menuBar = document.querySelector(".menu-bar");
-const menuOptions = document.querySelectorAll(".menu-content > div");
-const menuTitle = document.querySelector("#menu-bar");
-const gameContent = document.querySelector(".game-content");
-const statusBar = document.querySelector(".top-bar-game-content");
-const petBody = document.querySelector(".pet-body");
-const bottomBar = document.querySelector(".bottom-bar-game-content");
-const actionButtons = document.querySelectorAll(".action-button");
-const inventoryBar = document.querySelector(".inventory-bar");
-const inventoryBarTitle = document.querySelector("#inventory-bar");
-
 const petHungerLoseValue = 100;
 const petCleanlinessLoseValue = 0;
 const petNeedsLoseValue = 100;
 const foodAttribute = "food";
 const minHungerValueToFeed = 20;
 const fedTimesToEvolve = 5;
+const minCleanlinessValueToClean = 80;
 
 
 
@@ -25,6 +13,7 @@ const game = {
     init: function () {
         setPetStartingValues();
         initMenuButtons();
+        initActionButtons();
         undragImages();
         initDragAndDrop();
         shuffleInventoryItems();
@@ -32,6 +21,7 @@ const game = {
     },
     running: function () {
         // setPetHunger();
+        setPetCleanliness();
     },
     end: function (message) {
         endGame(message);
@@ -51,6 +41,11 @@ const gameWindow = {
     setNightButton: null,
     musicButton: null,
     resetButton: null,
+    showerButton: null,
+    sleepButton: null,
+    gameButton: null,
+    toiletButton: null,
+    walkButton: null,
 }
 
 const pet = {
@@ -74,6 +69,11 @@ function initMenuButtons() {
     addTestEndGameButton();
 }
 
+function initActionButtons() {
+    assignActionButtons();
+    activateActionButtons();
+}
+
 
 function assignMenuButtons() {
     gameWindow.setDayButton = document.querySelector("#set-day-button");
@@ -82,10 +82,24 @@ function assignMenuButtons() {
     gameWindow.resetButton = document.querySelector("#reset-button");
 }
 
+
 function activateMenuButtons() {
     gameWindow.resetButton.addEventListener("click", resetGame);
     gameWindow.setDayButton.addEventListener("click", setDay);
     gameWindow.setNightButton.addEventListener("click", setNight);
+}
+
+function assignActionButtons() {
+    gameWindow.walkButton = document.querySelector("#walk-button");
+    gameWindow.toiletButton = document.querySelector("#toilet-button");
+    gameWindow.gameButton = document.querySelector("#game-button");
+    gameWindow.sleepButton = document.querySelector("#sleep-button");
+    gameWindow.showerButton = document.querySelector("#shower-button");
+}
+
+
+function activateActionButtons() {
+    gameWindow.showerButton.addEventListener("click", cleanPet);
 }
 
 function addTestEndGameButton() {
@@ -103,7 +117,7 @@ function resetGame() {
 function setPetStartingValues() {
     pet.happiness = 0;
     pet.sleepiness = 0;
-    pet.cleanliness = 0;
+    pet.cleanliness = 100;
     pet.hunger = 0;
     pet.needs = 0;
     pet.stage = 0;
@@ -255,6 +269,20 @@ function handleDrop(e) {
 }
 
 
+function cleanPet() {
+    if (pet.cleanliness <= minCleanlinessValueToClean) {
+        pet.cleanliness += 10;
+        gameEnvironment.inGameMessage.style.visibility = "visible";
+        gameEnvironment.inGameMessage.innerText = "You've cleaned your pet.";
+        setTimeout(clearInGameMessage, 5000);
+    } else {
+        gameEnvironment.inGameMessage.style.visibility = "visible";
+        gameEnvironment.inGameMessage.innerText = "Pet is not dirty yet.";
+        setTimeout(clearInGameMessage, 5000);
+    }
+}
+
+
 function restorePetBackgroundDefaults() {
     gameEnvironment.petBackground.style.border = "4px solid black";
     gameEnvironment.petBackground.style.opacity = "100%";
@@ -278,21 +306,37 @@ function setDay() {
 
 function setPetHunger() {
     petHungerInterval = setInterval(() => {
-        let hungerAddValue = (Math.random() * 6) | 0
+        let hungerAddValue = (Math.random() * 6) | 0;
         pet.hunger += hungerAddValue;
         if (pet.hunger >= petHungerLoseValue) {
             const endGameMessage = "Pet was too hungry, you lost."
             game.end(endGameMessage);
             return;
         }
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = `Pet hunger: ${pet.hunger}`;
+        // gameEnvironment.inGameMessage.style.visibility = "visible";
+        // gameEnvironment.inGameMessage.innerText = `Pet hunger: ${pet.hunger}`;
     }, 1000);
+}
+
+
+function setPetCleanliness() {
+    petCleanlinessInterval = setInterval(() => {
+        let cleanlinessRemoveValue = (Math.random() * 6) | 0;
+        pet.cleanliness -= cleanlinessRemoveValue;
+        if (pet.cleanliness <= petCleanlinessLoseValue) {
+            const endGameMessage = "Your pet was too dirty, you lost.";
+            game.end(endGameMessage);
+            return;
+        }
+        gameEnvironment.inGameMessage.style.visibility = "visible";
+        gameEnvironment.inGameMessage.innerText = `Pet cleanliness: ${pet.cleanliness}`;
+    }, 2000);
 }
 
 
 function clearOnRunningIntervals() {
     clearInterval(petHungerInterval);
+    clearInterval(petCleanlinessInterval);
 }
 
 function endGame(message) {
