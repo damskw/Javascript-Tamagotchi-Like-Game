@@ -22,8 +22,8 @@ const game = {
         game.running();
     },
     running: function () {
-        // setPetHunger();
-        setPetCleanliness();
+        setPetHunger();
+        // setPetCleanliness();
     },
     end: function (message) {
         endGame(message);
@@ -257,6 +257,7 @@ function handleDrop(e) {
         gameEnvironment.inGameMessage.innerText = "You've fed the pet!";
         setTimeout(clearInGameMessage, 5000);
         pet.hunger -= removeHungerValue;
+        updatePetHungerBar(pet.hunger);
         pet.fedTimes += 1;
         if (pet.fedTimes >= fedTimesToEvolve) {
             pet.stage += 1;
@@ -305,11 +306,36 @@ function setDay() {
     body.style.backgroundColor = "white";
 }
 
+function updatePetHungerBar(value) {
+    const petHungerBar = document.querySelector("#hunger-bar");
+    petHungerBar.style.width = `${value}%`;
+    if (value < 50) {
+        petHungerBar.style.background = "green";
+    } else if (value >= 50 && value < 80) {
+        petHungerBar.style.background = "yellow";
+    } else if (value >= 80) {
+        petHungerBar.style.background = "red";
+    }
+}
+
+function updatePetCleanlinessBar(value) {
+    const petCleanlinessBar = document.querySelector("");
+    petCleanlinessBar.style.width = `${value}%`;
+    if (value < 30) {
+        petHungerBar.style.background = "red";
+    } else if (value >= 30 && value < 80) {
+        petHungerBar.style.background = "yellow";
+    } else if (value >= 80) {
+        petHungerBar.style.background = "green";
+    }
+}
+
 
 function setPetHunger() {
     petHungerInterval = setInterval(() => {
         let hungerAddValue = (Math.random() * 6) | 0;
         pet.hunger += hungerAddValue;
+        updatePetHungerBar(pet.hunger);
         if (pet.hunger >= petHungerLoseValue) {
             const endGameMessage = "Pet was too hungry, you lost."
             game.end(endGameMessage);
@@ -317,7 +343,7 @@ function setPetHunger() {
         }
         // gameEnvironment.inGameMessage.style.visibility = "visible";
         // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet hunger: ${pet.hunger}`;
-    }, 1000);
+    }, 2000);
 }
 
 
@@ -330,8 +356,8 @@ function setPetCleanliness() {
             game.end(endGameMessage);
             return;
         }
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet cleanliness: ${pet.cleanliness}`;
+        // gameEnvironment.inGameMessage.style.visibility = "visible";
+        // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet cleanliness: ${pet.cleanliness}`;
     }, 2000);
 }
 
