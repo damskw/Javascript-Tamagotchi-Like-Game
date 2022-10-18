@@ -316,7 +316,7 @@ function setPetHunger() {
             return;
         }
         // gameEnvironment.inGameMessage.style.visibility = "visible";
-        // gameEnvironment.inGameMessage.innerText = `Pet hunger: ${pet.hunger}`;
+        // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet hunger: ${pet.hunger}`;
     }, 1000);
 }
 
@@ -331,7 +331,7 @@ function setPetCleanliness() {
             return;
         }
         gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = `Pet cleanliness: ${pet.cleanliness}`;
+        gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet cleanliness: ${pet.cleanliness}`;
     }, 2000);
 }
 
