@@ -152,8 +152,8 @@ body {
 
 .status-slots {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 3em;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 0em;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -318,4 +318,21 @@ body {
     height: 100%;
     width: 0%;
     background-color: green;
+}
+
+#start-game-button {
+    height: 5vh;
+    width: 13vw;
+}
+
+#clean-status {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    justify-content: center; 
+}
+
+#sleep-status {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    justify-content: center;
 }

@@ -2,7 +2,7 @@ const petHungerLoseValue = 100;
 const petCleanlinessLoseValue = 0;
 const petNeedsLoseValue = 100;
 const petHappinessLoseValue = 0;
-const intervalsTime = 3000;
+const intervalsTime = 200;
 const foodAttribute = "food";
 const minHungerValueToFeed = 20;
 const fedTimesToEvolve = 5;
@@ -18,7 +18,14 @@ const minHappinessValueToEntertain = 90;
 
 
 const game = {
+    preInit: function() {
+        getPlayerName();
+        getPetName();
+        updatePetAge();
+        initGame();
+    },
     init: function () {
+        changeDisplayOfInventoryItems("visible");
         setPetStartingValues();
         placePetOnGameWindow();
         initMenuButtons();
@@ -29,7 +36,7 @@ const game = {
         game.running();
     },
     running: function () {
-        setPetHunger();
+        // setPetHunger();
         setPetHappiness();
         // setPetCleanliness();
     },
@@ -66,10 +73,62 @@ const pet = {
     needs: 0,
     stage: 0,
     fedTimes: 0,
+    age: 0,
 }
 
 const player = {
     name: null,
+}
+
+function changeDisplayOfInventoryItems(display) {
+    const inventoryItems = document.querySelectorAll(".inventory-item > img");
+    if (display == "hidden") {
+        inventoryItems.forEach(item => {
+            item.style.visibility = "hidden";
+        })
+    } else if (display == "visible") {
+        inventoryItems.forEach(item => {
+            item.style.visibility = "visible";
+        })
+    }
+}
+
+
+function getBoardReady() {
+    changeDisplayOfInventoryItems("hidden");
+    const startGameButton = document.querySelector("#start-game-button");
+    startGameButton.addEventListener("click", game.preInit);
+}
+
+function getPlayerName() {
+    const playerName = prompt("Please enter your name:")
+    const petOwnerInformation = document.querySelector("#pet-owner");
+    petOwnerInformation.innerText = "Owner: " + playerName;
+}
+
+function getPetName() {
+    const petName = prompt("Please name your pet:");
+    const petNameInformation = document.querySelector("#pet-name");
+    petNameInformation.innerText = "Pet name: " + petName;
+}
+
+
+function initGame() {
+    deleteStartButton();
+    game.init();
+}
+
+
+function deleteStartButton() {
+    const startGameButton = document.querySelector("#start-game-button");
+    const startGameButtonParent = document.querySelector(".pet-body");
+    startGameButtonParent.removeChild(startGameButton);
+}
+
+function updatePetAge() {
+    const petAgeInformation = document.querySelector("#pet-age");
+    const petAge = pet.stage * 4;
+    petAgeInformation.innerText = "Age: " + petAge;
 }
 
 
@@ -111,7 +170,7 @@ function assignActionButtons() {
 function activateActionButtons() {
     gameWindow.showerButton.addEventListener("click", cleanPet);
     gameWindow.toiletButton.addEventListener("click", usePetBathroom);
-    gameWindow.walkButton.addEventListener("click", entertainPet);
+    gameWindow.walkButton.addEventListener("click", walkThePet);
     gameWindow.gameButton.addEventListener("click", entertainPet);
 }
 
@@ -120,7 +179,6 @@ function addTestEndGameButton() {
 }
 
 function placePetOnGameWindow() {
-    const petBodyImage = document.querySelector("#pet-body-image");
     changePetImage("img/Egg3.png", 1.50);
 }
 
@@ -140,6 +198,7 @@ function setPetStartingValues() {
     pet.needs = 0;
     pet.stage = 1;
     pet.fedTimes = 0;
+    pet.age = 0;
     updatePetHappinessBar(pet.happiness);
 }
 
@@ -280,9 +339,11 @@ function handleDrop(e) {
             pet.stage += 1;
             pet.fedTimes = 0;
             if (pet.stage == 2) {
+                updatePetAge();
                 sendInGameMessage("Your pet has evolved! Yay!");
                 changePetImage("img/cat.png", 2);
             } else if (pet.stage == 3) {
+                updatePetAge();
                 sendInGameMessage("Your pet has evolved! Yay!");
                 changePetImage("img/Pet.png", 1);
             }
@@ -320,6 +381,20 @@ function entertainPet() {
     }
 }
 
+function walkThePet() {
+    if (pet.happiness <= minHappinessValueToEntertain) {
+        pet.happiness += addHappinessValue;
+        updatePetHappinessBar(pet.happiness);
+        sendInGameMessage("You've taken your pet for a walk!")
+        gameEnvironment.petBackground.style.backgroundImage = "url('img/Walk2.png')";
+        setTimeout(() => {
+            gameEnvironment.petBackground.style.backgroundImage = ("url('background -pet.png')")
+        }, 2000);
+    } else {
+        sendInGameMessage("Pet is too tired, try again later.")
+    }
+}
+
 function usePetBathroom() {
     if (pet.needs >= minNeedsValueToUseBathroom) {
         pet.needs -= removeNeedsValue;
@@ -343,17 +418,15 @@ function clearInGameMessage() {
 
 function setNight() {
     const body = document.body;
-    const petBackground = document.querySelector(".pet-game-content");
     body.style.backgroundColor = "black";
-    petBackground.style.backgroundImage = "url('img/background-pet1.jpg')";
+    gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.jpg')";
 
 }
 
 function setDay() {
     const body = document.body;
-    const petBackground = document.querySelector(".pet-game-content");
     body.style.backgroundColor = "lightblue";
-    petBackground.style.backgroundImage = "url('img/background -pet.png')";
+    gameEnvironment.petBackground.style.backgroundImage = "url('img/background -pet.png')";
 }
 
 function updatePetHungerBar(value) {
@@ -368,6 +441,8 @@ function updatePetHungerBar(value) {
     }
 }
 
+
+
 function updatePetCleanlinessBar(value) {
     const petCleanlinessBar = document.querySelector("");
     petCleanlinessBar.style.width = `${value}%`;
@@ -381,14 +456,21 @@ function updatePetCleanlinessBar(value) {
 }
 
 function updatePetHappinessBar(value) {
+    const happinessIcon = document.querySelector("#happiness-icon");
     const petHappinessBar = document.querySelector("#happiness-bar");
     petHappinessBar.style.width = `${value}%`;
     if (value < 30) {
         petHappinessBar.style.background = "red";
+        happinessIcon.src = "img/madStatus.png";
+        happinessIcon.style.scale = 2;
     } else if (value >= 30 && value < 80) {
         petHappinessBar.style.background = "yellow";
+        happinessIcon.src = "img/midStatus.png";
+        happinessIcon.style.scale = 1;
     } else if (value >= 80) {
         petHappinessBar.style.background = "green";
+        happinessIcon.src = "img/happyStatus.png";
+        happinessIcon.style.scale = 1;
     }
 }
 
@@ -473,4 +555,5 @@ function endGame(message) {
 }
 
 
-game.init();
+// game.init();
+getBoardReady();
