@@ -111,7 +111,7 @@ function assignActionButtons() {
 function activateActionButtons() {
     gameWindow.showerButton.addEventListener("click", cleanPet);
     gameWindow.toiletButton.addEventListener("click", usePetBathroom);
-    gameWindow.walkButton.addEventListener("click", entertainPet);
+    gameWindow.walkButton.addEventListener("click", walkThePet);
     gameWindow.gameButton.addEventListener("click", entertainPet);
 }
 
@@ -354,6 +354,19 @@ function setDay() {
     const petBackground = document.querySelector(".pet-game-content");
     body.style.backgroundColor = "lightblue";
     petBackground.style.backgroundImage = "url('img/background -pet.png')";
+}
+
+function walkThePet() {
+    const body = document.body;
+    const petBackground = document.querySelector(".pet-game-content");
+    petBackground.style.backgroundImage = "url('img/Walk2.png')";
+    if (pet.happiness <= minHappinessValueToEntertain) {
+        pet.happiness += addHappinessValue;
+        updatePetHappinessBar(pet.happiness);
+        sendInGameMessage("Yay! You've entertainted your pet!")
+    } else {
+        sendInGameMessage("Pet is too tired, try again later.")
+    }
 }
 
 function updatePetHungerBar(value) {
