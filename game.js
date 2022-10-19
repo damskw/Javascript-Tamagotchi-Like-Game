@@ -14,6 +14,7 @@ const addCleanlinessValue = 10;
 const game = {
     init: function () {
         setPetStartingValues();
+        placePetOnGameWindow();
         initMenuButtons();
         initActionButtons();
         undragImages();
@@ -22,8 +23,8 @@ const game = {
         game.running();
     },
     running: function () {
-        // setPetHunger();
-        setPetCleanliness();
+        setPetHunger();
+        // setPetCleanliness();
     },
     end: function (message) {
         endGame(message);
@@ -108,6 +109,11 @@ function addTestEndGameButton() {
     gameWindow.musicButton.addEventListener("click", game.end);
 }
 
+function placePetOnGameWindow() {
+    const petBodyImage = document.querySelector("#pet-body-image");
+    changePetImage("img/Egg3.png", 1.50);
+}
+
 
 function resetGame() {
     clearInGameMessage();
@@ -122,7 +128,7 @@ function setPetStartingValues() {
     pet.cleanliness = 100;
     pet.hunger = 0;
     pet.needs = 0;
-    pet.stage = 0;
+    pet.stage = 1;
     pet.fedTimes = 0;
 }
 
@@ -253,34 +259,41 @@ function handleDrop(e) {
     e.preventDefault();
     const draggedAttribute = gameEnvironment.dragged.getAttribute("type");
     if (draggedAttribute == foodAttribute && pet.hunger >= minHungerValueToFeed) {
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = "You've fed the pet!";
-        setTimeout(clearInGameMessage, 5000);
+        sendInGameMessage("You've fed the pet!")
         pet.hunger -= removeHungerValue;
+        updatePetHungerBar(pet.hunger);
         pet.fedTimes += 1;
         if (pet.fedTimes >= fedTimesToEvolve) {
             pet.stage += 1;
             pet.fedTimes = 0;
+            if (pet.stage == 2) {
+                sendInGameMessage("Your pet has evolved! Yay!");
+                changePetImage("img/cat.png", 2);
+            } else if (pet.stage == 3) {
+                sendInGameMessage("Your pet has evolved! Yay!");
+                changePetImage("img/Pet.png", 1);
+            }
         }
     } else if (draggedAttribute == foodAttribute && pet.hunger < minHungerValueToFeed) {
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = "Pet is not hungry yet.";
-        setTimeout(clearInGameMessage, 5000);
+        sendInGameMessage("Pet is not hungry yet.");
     }
     restorePetBackgroundDefaults();
+}
+
+
+function sendInGameMessage(message) {
+    gameEnvironment.inGameMessage.style.visibility = "visible";
+    gameEnvironment.inGameMessage.innerText = message;
+    setTimeout(clearInGameMessage, 5000);
 }
 
 
 function cleanPet() {
     if (pet.cleanliness <= minCleanlinessValueToClean) {
         pet.cleanliness += addCleanlinessValue;
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = "You've cleaned your pet.";
-        setTimeout(clearInGameMessage, 5000);
+        sendInGameMessage("You've cleaned your pet.")
     } else {
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = "Pet is not dirty yet.";
-        setTimeout(clearInGameMessage, 5000);
+        sendInGameMessage("Pet is not dirty yet.")
     }
 }
 
@@ -297,12 +310,41 @@ function clearInGameMessage() {
 
 function setNight() {
     const body = document.body;
+    const petBackground = document.querySelector(".pet-game-content");
     body.style.backgroundColor = "black";
+    petBackground.style.backgroundImage = "url('img/background-pet1.jpg')";
+
 }
 
 function setDay() {
     const body = document.body;
-    body.style.backgroundColor = "white";
+    const petBackground = document.querySelector(".pet-game-content");
+    body.style.backgroundColor = "lightblue";
+    petBackground.style.backgroundImage = "url('img/background -pet.png')";
+}
+
+function updatePetHungerBar(value) {
+    const petHungerBar = document.querySelector("#hunger-bar");
+    petHungerBar.style.width = `${value}%`;
+    if (value < 50) {
+        petHungerBar.style.background = "green";
+    } else if (value >= 50 && value < 80) {
+        petHungerBar.style.background = "yellow";
+    } else if (value >= 80) {
+        petHungerBar.style.background = "red";
+    }
+}
+
+function updatePetCleanlinessBar(value) {
+    const petCleanlinessBar = document.querySelector("");
+    petCleanlinessBar.style.width = `${value}%`;
+    if (value < 30) {
+        petHungerBar.style.background = "red";
+    } else if (value >= 30 && value < 80) {
+        petHungerBar.style.background = "yellow";
+    } else if (value >= 80) {
+        petHungerBar.style.background = "green";
+    }
 }
 
 
@@ -310,6 +352,7 @@ function setPetHunger() {
     petHungerInterval = setInterval(() => {
         let hungerAddValue = (Math.random() * 6) | 0;
         pet.hunger += hungerAddValue;
+        updatePetHungerBar(pet.hunger);
         if (pet.hunger >= petHungerLoseValue) {
             const endGameMessage = "Pet was too hungry, you lost."
             game.end(endGameMessage);
@@ -317,7 +360,7 @@ function setPetHunger() {
         }
         // gameEnvironment.inGameMessage.style.visibility = "visible";
         // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet hunger: ${pet.hunger}`;
-    }, 1000);
+    }, 300);
 }
 
 
@@ -330,9 +373,16 @@ function setPetCleanliness() {
             game.end(endGameMessage);
             return;
         }
-        gameEnvironment.inGameMessage.style.visibility = "visible";
-        gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet cleanliness: ${pet.cleanliness}`;
+        // gameEnvironment.inGameMessage.style.visibility = "visible";
+        // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet cleanliness: ${pet.cleanliness}`;
     }, 2000);
+}
+
+
+function changePetImage(imageURL, scale) {
+    const petBodyImage = document.querySelector("#pet-body-image");
+    petBodyImage.src = imageURL;
+    petBodyImage.style.scale = scale;
 }
 
 

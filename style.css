@@ -1,3 +1,8 @@
+body {
+    background-color: lightblue;
+}
+
+
 .main-game-container {
     border: 1px solid black;
     width: 90%;
@@ -307,4 +312,10 @@
 
 .message-box h1 {
     visibility: hidden;
+}
+
+.progress-bar > div {
+    height: 100%;
+    width: 0%;
+    background-color: green;
 }
