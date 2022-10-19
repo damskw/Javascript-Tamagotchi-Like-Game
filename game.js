@@ -475,7 +475,7 @@ function updatePetHappinessBar(value) {
     if (value < 30) {
         petHappinessBar.style.background = "red";
         happinessIcon.src = "img/madStatus.png";
-        happinessIcon.style.scale = 2;
+        happinessIcon.style.scale = 1;
     } else if (value >= 30 && value < 80) {
         petHappinessBar.style.background = "yellow";
         happinessIcon.src = "img/midStatus.png";
