@@ -1,12 +1,18 @@
 const petHungerLoseValue = 100;
 const petCleanlinessLoseValue = 0;
 const petNeedsLoseValue = 100;
+const petHappinessLoseValue = 0;
+const intervalsTime = 3000;
 const foodAttribute = "food";
 const minHungerValueToFeed = 20;
 const fedTimesToEvolve = 5;
 const minCleanlinessValueToClean = 80;
+const minNeedsValueToUseBathroom = 15;
 const removeHungerValue = 10;
 const addCleanlinessValue = 10;
+const removeNeedsValue = 10;
+const addHappinessValue = 10;
+const minHappinessValueToEntertain = 90;
 
 
 
@@ -24,6 +30,7 @@ const game = {
     },
     running: function () {
         setPetHunger();
+        setPetHappiness();
         // setPetCleanliness();
     },
     end: function (message) {
@@ -103,6 +110,9 @@ function assignActionButtons() {
 
 function activateActionButtons() {
     gameWindow.showerButton.addEventListener("click", cleanPet);
+    gameWindow.toiletButton.addEventListener("click", usePetBathroom);
+    gameWindow.walkButton.addEventListener("click", entertainPet);
+    gameWindow.gameButton.addEventListener("click", entertainPet);
 }
 
 function addTestEndGameButton() {
@@ -130,6 +140,7 @@ function setPetStartingValues() {
     pet.needs = 0;
     pet.stage = 1;
     pet.fedTimes = 0;
+    updatePetHappinessBar(pet.happiness);
 }
 
 function undragImages() {
@@ -263,6 +274,8 @@ function handleDrop(e) {
         pet.hunger -= removeHungerValue;
         updatePetHungerBar(pet.hunger);
         pet.fedTimes += 1;
+        pet.needs += 10;
+        updatePetNeedsBar(pet.needs);
         if (pet.fedTimes >= fedTimesToEvolve) {
             pet.stage += 1;
             pet.fedTimes = 0;
@@ -294,6 +307,26 @@ function cleanPet() {
         sendInGameMessage("You've cleaned your pet.")
     } else {
         sendInGameMessage("Pet is not dirty yet.")
+    }
+}
+
+function entertainPet() {
+    if (pet.happiness <= minHappinessValueToEntertain) {
+        pet.happiness += addHappinessValue;
+        updatePetHappinessBar(pet.happiness);
+        sendInGameMessage("Yay! You've entertainted your pet!")
+    } else {
+        sendInGameMessage("Pet is too tired, try again later.")
+    }
+}
+
+function usePetBathroom() {
+    if (pet.needs >= minNeedsValueToUseBathroom) {
+        pet.needs -= removeNeedsValue;
+        updatePetNeedsBar(pet.needs);
+        sendInGameMessage("Your pet has used the bathroom.")
+    } else {
+        sendInGameMessage("Pet doesn't need to use bathroom yet.")
     }
 }
 
@@ -347,6 +380,35 @@ function updatePetCleanlinessBar(value) {
     }
 }
 
+function updatePetHappinessBar(value) {
+    const petHappinessBar = document.querySelector("#happiness-bar");
+    petHappinessBar.style.width = `${value}%`;
+    if (value < 30) {
+        petHappinessBar.style.background = "red";
+    } else if (value >= 30 && value < 80) {
+        petHappinessBar.style.background = "yellow";
+    } else if (value >= 80) {
+        petHappinessBar.style.background = "green";
+    }
+}
+
+
+function updatePetNeedsBar(value) {
+    const petNeedsBar = document.querySelector("#toilet-bar");
+    petNeedsBar.style.width = `${value}%`;
+    if (value < 50) {
+        petNeedsBar.style.background = "green";
+    } else if (value >= 50 && value < 80) {
+        petNeedsBar.style.background = "yellow";
+    } else if (value >= 80 && value < 100) {
+        petNeedsBar.style.background = "red";
+    } else if (value >= 100) {
+        const endGameMessage = "Your pet wanted to use bathroom badly but you didn't let him."
+        game.end(endGameMessage);
+        return;
+    }
+}
+
 
 function setPetHunger() {
     petHungerInterval = setInterval(() => {
@@ -358,11 +420,8 @@ function setPetHunger() {
             game.end(endGameMessage);
             return;
         }
-        // gameEnvironment.inGameMessage.style.visibility = "visible";
-        // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet hunger: ${pet.hunger}`;
-    }, 300);
+    }, intervalsTime);
 }
-
 
 function setPetCleanliness() {
     petCleanlinessInterval = setInterval(() => {
@@ -373,9 +432,19 @@ function setPetCleanliness() {
             game.end(endGameMessage);
             return;
         }
-        // gameEnvironment.inGameMessage.style.visibility = "visible";
-        // gameEnvironment.inGameMessage.innerText = `DEBUG ONLY: Pet cleanliness: ${pet.cleanliness}`;
-    }, 2000);
+    }, intervalsTime);
+}
+
+function setPetHappiness() {
+    petHappinessInterval = setInterval(() => {
+        let hapinessRemoveValue = (Math.random() * 6) | 0;
+        pet.happiness -= hapinessRemoveValue;
+        updatePetHappinessBar(pet.happiness);
+        if (pet.happiness <= petHappinessLoseValue) {
+            sendInGameMessage("Your pet is miserable! Entertain it!");
+            clearInterval(petHappinessInterval);
+        }
+    }, intervalsTime);
 }
 
 
@@ -389,6 +458,7 @@ function changePetImage(imageURL, scale) {
 function clearOnRunningIntervals() {
     clearInterval(petHungerInterval);
     clearInterval(petCleanlinessInterval);
+    clearInterval(petHappinessInterval);
 }
 
 function endGame(message) {
