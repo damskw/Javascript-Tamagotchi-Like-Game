@@ -36,6 +36,7 @@ const game = {
         game.running();
     },
     running: function () {
+        // setPetCleanliness();
         // setPetHunger();
         setPetHappiness();
         // setPetCleanliness();
@@ -388,7 +389,7 @@ function walkThePet() {
         sendInGameMessage("You've taken your pet for a walk!")
         gameEnvironment.petBackground.style.backgroundImage = "url('img/Walk2.png')";
         setTimeout(() => {
-            gameEnvironment.petBackground.style.backgroundImage = ("url('background -pet.png')")
+            gameEnvironment.petBackground.style.backgroundImage = "url('img/background -pet.png')"
         }, 2000);
     } else {
         sendInGameMessage("Pet is too tired, try again later.")
@@ -457,7 +458,7 @@ function updatePetHungerBar(value) {
 
 
 function updatePetCleanlinessBar(value) {
-    const petCleanlinessBar = document.querySelector("");
+    const petCleanlinessBar = document.querySelector("#clean-bar");
     petCleanlinessBar.style.width = `${value}%`;
     if (value < 30) {
         petHungerBar.style.background = "red";
@@ -475,15 +476,12 @@ function updatePetHappinessBar(value) {
     if (value < 30) {
         petHappinessBar.style.background = "red";
         happinessIcon.src = "img/madStatus.png";
-        happinessIcon.style.scale = 1;
     } else if (value >= 30 && value < 80) {
         petHappinessBar.style.background = "yellow";
         happinessIcon.src = "img/midStatus.png";
-        happinessIcon.style.scale = 1;
     } else if (value >= 80) {
         petHappinessBar.style.background = "green";
         happinessIcon.src = "img/happyStatus.png";
-        happinessIcon.style.scale = 1;
     }
 }
 
@@ -522,6 +520,7 @@ function setPetCleanliness() {
     petCleanlinessInterval = setInterval(() => {
         let cleanlinessRemoveValue = (Math.random() * 6) | 0;
         pet.cleanliness -= cleanlinessRemoveValue;
+        updatePetCleanlinessBar(pet.cleanliness);
         if (pet.cleanliness <= petCleanlinessLoseValue) {
             const endGameMessage = "Your pet was too dirty, you lost.";
             game.end(endGameMessage);
