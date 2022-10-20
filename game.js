@@ -2,7 +2,7 @@ const petHungerLoseValue = 100;
 const petCleanlinessLoseValue = 0;
 const petNeedsLoseValue = 100;
 const petHappinessLoseValue = 0;
-const intervalsTime = 200;
+const intervalsTime = 5000;
 const foodAttribute = "food";
 const minHungerValueToFeed = 20;
 const fedTimesToEvolve = 5;
@@ -39,9 +39,9 @@ const game = {
         game.running();
     },
     running: function () {
-        // setPetCleanliness();
-        // setPetHunger();
-        // setPetHappiness();
+        setPetCleanliness();
+        setPetHunger();
+        setPetHappiness();
         setPetSleepiness();
     },
     end: function (message) {
@@ -380,6 +380,7 @@ function cleanPet() {
 function putPetToBed() {
     if (pet.sleepiness >= minSleepinessValueToSleep) {
         pet.sleepiness -= removeSleepinessValue;
+        updatePetSleepinessBar(pet.sleepiness);
         sendInGameMessage("You've put your pet to bed.")
     } else {
         sendInGameMessage("Pet is not sleepy yet.")
