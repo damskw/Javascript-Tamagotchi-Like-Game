@@ -419,14 +419,14 @@ function clearInGameMessage() {
 
 function setNight() {
     const body = document.body;
-    body.style.backgroundColor = "black";
+    body.style.backgroundImage = "url('img/Night-background.jpg')";
     gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.png')";
 
 }
 
 function setDay() {
     const body = document.body;
-    body.style.backgroundColor = "lightblue";
+    body.style.backgroundImage = "url('img/Day-background.png')";
     gameEnvironment.petBackground.style.backgroundImage = "url('img/background -pet.png')";
 }
 
