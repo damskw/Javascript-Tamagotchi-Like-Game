@@ -420,7 +420,7 @@ function clearInGameMessage() {
 function setNight() {
     const body = document.body;
     body.style.backgroundColor = "black";
-    gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.jpg')";
+    gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.png')";
 
 }
 
