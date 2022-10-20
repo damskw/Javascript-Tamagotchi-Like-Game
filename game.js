@@ -370,6 +370,7 @@ function sendInGameMessage(message) {
 function cleanPet() {
     if (pet.cleanliness <= minCleanlinessValueToClean) {
         pet.cleanliness += addCleanlinessValue;
+        updatePetCleanlinessBar(pet.cleanliness);
         sendInGameMessage("You've cleaned your pet.")
     } else {
         sendInGameMessage("Pet is not dirty yet.")
