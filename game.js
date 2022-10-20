@@ -419,15 +419,28 @@ function clearInGameMessage() {
 
 function setNight() {
     const body = document.body;
-    body.style.backgroundColor = "black";
-    gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.jpg')";
+    body.style.backgroundImage = "url('img/Night-background.jpg')";
+    gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.png')";
 
 }
 
 function setDay() {
     const body = document.body;
-    body.style.backgroundColor = "lightblue";
+    body.style.backgroundImage = "url('img/Day-background.png')";
     gameEnvironment.petBackground.style.backgroundImage = "url('img/background -pet.png')";
+}
+
+function walkThePet() {
+    const body = document.body;
+    const petBackground = document.querySelector(".pet-game-content");
+    petBackground.style.backgroundImage = "url('img/Walk2.png')";
+    if (pet.happiness <= minHappinessValueToEntertain) {
+        pet.happiness += addHappinessValue;
+        updatePetHappinessBar(pet.happiness);
+        sendInGameMessage("Yay! You've entertainted your pet!")
+    } else {
+        sendInGameMessage("Pet is too tired, try again later.")
+    }
 }
 
 function updatePetHungerBar(value) {
