@@ -13,6 +13,9 @@ const addCleanlinessValue = 10;
 const removeNeedsValue = 10;
 const addHappinessValue = 10;
 const minHappinessValueToEntertain = 90;
+const minSleepinessValueToSleep = 30;
+const removeSleepinessValue = 30;
+const sleepinessValueToLose = 100;
 
 
 
@@ -38,8 +41,8 @@ const game = {
     running: function () {
         // setPetCleanliness();
         // setPetHunger();
-        setPetHappiness();
-        // setPetCleanliness();
+        // setPetHappiness();
+        setPetSleepiness();
     },
     end: function (message) {
         endGame(message);
@@ -173,6 +176,7 @@ function activateActionButtons() {
     gameWindow.toiletButton.addEventListener("click", usePetBathroom);
     gameWindow.walkButton.addEventListener("click", walkThePet);
     gameWindow.gameButton.addEventListener("click", entertainPet);
+    gameWindow.sleepButton.addEventListener("click", putPetToBed);
 }
 
 function addTestEndGameButton() {
@@ -372,6 +376,17 @@ function cleanPet() {
     }
 }
 
+
+function putPetToBed() {
+    if (pet.sleepiness >= minSleepinessValueToSleep) {
+        pet.sleepiness -= removeSleepinessValue;
+        sendInGameMessage("You've put your pet to bed.")
+    } else {
+        sendInGameMessage("Pet is not sleepy yet.")
+    }
+}
+
+
 function entertainPet() {
     if (pet.happiness <= minHappinessValueToEntertain) {
         pet.happiness += addHappinessValue;
@@ -443,6 +458,19 @@ function updatePetHungerBar(value) {
 }
 
 
+function updatePetSleepinessBar(value) {
+    const petSleepinessBar = document.querySelector("#sleep-bar");
+    petSleepinessBar.style.width = `${value}%`;
+    if (value < 50) {
+        petSleepinessBar.style.background = "green";
+    } else if (value >= 50 && value < 80) {
+        petSleepinessBar.style.background = "yellow";
+    } else if (value >= 80) {
+        petSleepinessBar.style.background = "red";
+    }
+}
+
+
 
 function updatePetCleanlinessBar(value) {
     const petCleanlinessBar = document.querySelector("#clean-bar");
@@ -503,6 +531,20 @@ function setPetHunger() {
     }, intervalsTime);
 }
 
+function setPetSleepiness() {
+    petSleepinessInterval = setInterval(() => {
+        let sleepinessAddValue = (Math.random() * 6) | 0;
+        pet.sleepiness += sleepinessAddValue;
+        updatePetSleepinessBar(pet.sleepiness);
+        if (pet.sleepiness >= sleepinessValueToLose) {
+            const endGameMessage = "Your pet fell into a coma."
+            game.end(endGameMessage);
+            return;
+        }
+    }, intervalsTime);
+}
+
+
 function setPetCleanliness() {
     petCleanlinessInterval = setInterval(() => {
         let cleanlinessRemoveValue = (Math.random() * 6) | 0;
@@ -540,6 +582,7 @@ function clearOnRunningIntervals() {
     clearInterval(petHungerInterval);
     clearInterval(petCleanlinessInterval);
     clearInterval(petHappinessInterval);
+    clearInterval(petSleepinessInterval);
 }
 
 function endGame(message) {
