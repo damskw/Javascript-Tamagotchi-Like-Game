@@ -69,6 +69,7 @@ const gameWindow = {
     gameButton: null,
     toiletButton: null,
     walkButton: null,
+    petNeedsBar: null,
     petHungerBar: null,
     petSleepinessBar: null,
     petCleanlinessBar: null,
@@ -167,6 +168,7 @@ function assignProgressBars() {
     gameWindow.petCleanlinessBar = document.querySelector("#clean-bar");
     gameWindow.petHappinessIcon = document.querySelector("#happiness-icon");
     gameWindow.petHappinessBar = document.querySelector("#happiness-bar");
+    gameWindow.petNeedsBar = document.querySelector("#toilet-bar");
 }
 
 
@@ -479,7 +481,7 @@ function setDay() {
 
 
 function updateProgressBar(bar, value) {
-    if (bar == gameWindow.petSleepinessBar || bar == gameWindow.petHungerBar) {
+    if (bar == gameWindow.petSleepinessBar) {
         if (value < 50) {
             gameWindow.petSleepinessBar.style.width = `${value}%`;
             gameWindow.petSleepinessBar.style.background = "green";
@@ -501,7 +503,19 @@ function updateProgressBar(bar, value) {
             gameWindow.petCleanlinessBar.style.background = "green";
             gameWindow.petCleanlinessBar.style.width = `${value}%`;
         }
-    } else if (bar === gameWindow.petHappinessBar) {
+    } else if (bar == gameWindow.petHungerBar) {
+        if (value < 50) {
+            gameWindow.petHungerBar.style.width = `${value}%`;
+            gameWindow.petHungerBar.style.background = "green";
+        } else if (value >= 50 && value < 80) {
+            gameWindow.petHungerBar.style.width = `${value}%`;
+            gameWindow.petHungerBar.style.background = "yellow";
+        } else if (value >= 80) {
+            gameWindow.petHungerBar.style.width = `${value}%`;
+            gameWindow.petHungerBar.style.background = "red";
+        }
+    }
+    else if (bar === gameWindow.petHappinessBar) {
         if (value < 30) {
             gameWindow.petHappinessBar.style.background = "red";
             gameWindow.petHappinessIcon.src = "img/madStatus.png";
