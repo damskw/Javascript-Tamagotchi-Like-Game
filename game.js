@@ -29,9 +29,9 @@ const game = {
     },
     init: function () {
         changeDisplayOfInventoryItems("visible");
+        initMenuButtons();
         setPetStartingValues();
         placePetOnGameWindow();
-        initMenuButtons();
         initActionButtons();
         undragImages();
         initDragAndDrop();
@@ -69,7 +69,13 @@ const gameWindow = {
     gameButton: null,
     toiletButton: null,
     walkButton: null,
+    petHungerBar: null,
+    petSleepinessBar: null,
+    petCleanlinessBar: null,
+    petHappinessIcon: null,
+    petHappinessBar: null,
 }
+
 
 const pet = {
     happiness: 0,
@@ -146,11 +152,21 @@ function initMenuButtons() {
     assignMenuButtons();
     activateMenuButtons();
     addTestEndGameButton();
+    assignProgressBars();
 }
 
 function initActionButtons() {
     assignActionButtons();
     activateActionButtons();
+}
+
+
+function assignProgressBars() {
+    gameWindow.petHungerBar = document.querySelector("#hunger-bar");
+    gameWindow.petSleepinessBar = document.querySelector("#sleep-bar");
+    gameWindow.petCleanlinessBar = document.querySelector("#clean-bar");
+    gameWindow.petHappinessIcon = document.querySelector("#happiness-icon");
+    gameWindow.petHappinessBar = document.querySelector("#happiness-bar");
 }
 
 
@@ -210,7 +226,7 @@ function setPetStartingValues() {
     pet.stage = 1;
     pet.fedTimes = 0;
     pet.age = 0;
-    updatePetHappinessBar(pet.happiness);
+    updateProgressBar(gameWindow.petHappinessBar, pet.happiness);
 }
 
 function undragImages() {
@@ -342,10 +358,10 @@ function handleDrop(e) {
     if (draggedAttribute == foodAttribute && pet.hunger >= minHungerValueToFeed) {
         sendInGameMessage("You've fed the pet!")
         pet.hunger -= removeHungerValue;
-        updatePetHungerBar(pet.hunger);
+        updateProgressBar(gameWindow.petHungerBar, pet.hunger);
         pet.fedTimes += 1;
         pet.needs += 10;
-        updatePetNeedsBar(pet.needs);
+        updateProgressBar(gameWindow.petNeedsBar, pet.needs);
         if (pet.fedTimes >= fedTimesToEvolve) {
             pet.stage += 1;
             pet.fedTimes = 0;
@@ -376,7 +392,7 @@ function sendInGameMessage(message) {
 function cleanPet() {
     if (pet.cleanliness <= minCleanlinessValueToClean) {
         pet.cleanliness += addCleanlinessValue;
-        updatePetCleanlinessBar(pet.cleanliness);
+        updateProgressBar(gameWindow.petCleanlinessBar, pet.cleanliness);
         sendInGameMessage("You've cleaned your pet.")
     } else {
         sendInGameMessage("Pet is not dirty yet.")
@@ -387,7 +403,7 @@ function cleanPet() {
 function putPetToBed() {
     if (pet.sleepiness >= minSleepinessValueToSleep) {
         pet.sleepiness -= removeSleepinessValue;
-        updatePetSleepinessBar(pet.sleepiness);
+        updateProgressBar(gameWindow.petSleepinessBar, pet.sleepiness);
         sendInGameMessage("You've put your pet to bed.")
     } else {
         sendInGameMessage("Pet is not sleepy yet.")
@@ -398,7 +414,7 @@ function putPetToBed() {
 function entertainPet() {
     if (pet.happiness <= minHappinessValueToEntertain) {
         pet.happiness += addHappinessValue;
-        updatePetHappinessBar(pet.happiness);
+        updateProgressBar(gameWindow.petHappinessBar, pet.happiness);
         sendInGameMessage("Yay! You've entertainted your pet!")
     } else {
         sendInGameMessage("Pet is too tired, try again later.")
@@ -408,7 +424,7 @@ function entertainPet() {
 function walkThePet() {
     if (pet.happiness <= minHappinessValueToEntertain) {
         pet.happiness += addHappinessValue;
-        updatePetHappinessBar(pet.happiness);
+        updateProgressBar(gameWindow.petHappinessBar, pet.happiness);
         sendInGameMessage("You've taken your pet for a walk!")
         gameEnvironment.petBackground.style.backgroundImage = "url('img/Walk2.png')";
         if (gameEnvironment.timeOfDay == "day") {
@@ -428,7 +444,7 @@ function walkThePet() {
 function usePetBathroom() {
     if (pet.needs >= minNeedsValueToUseBathroom) {
         pet.needs -= removeNeedsValue;
-        updatePetNeedsBar(pet.needs);
+        updateProgressBar(gameWindow.petNeedsBar, pet.happiness);
         sendInGameMessage("Your pet has used the bathroom.")
     } else {
         sendInGameMessage("Pet doesn't need to use bathroom yet.")
@@ -462,77 +478,49 @@ function setDay() {
 }
 
 
-function updatePetHungerBar(value) {
-    const petHungerBar = document.querySelector("#hunger-bar");
-    petHungerBar.style.width = `${value}%`;
-    if (value < 50) {
-        petHungerBar.style.background = "green";
-    } else if (value >= 50 && value < 80) {
-        petHungerBar.style.background = "yellow";
-    } else if (value >= 80) {
-        petHungerBar.style.background = "red";
+function updateProgressBar(bar, value) {
+    bar.style.width = `${value}%`;
+    if (bar == gameWindow.petSleepinessBar || bar == gameWindow.petHungerBar) {
+        if (value < 50) {
+            gameWindow.petSleepinessBar.style.background = "green";
+        } else if (value >= 50 && value < 80) {
+            gameWindow.petSleepinessBar.style.background = "yellow";
+        } else if (value >= 80) {
+            gameWindow.petSleepinessBar.style.background = "red";
+        }
+    } else if (bar == gameWindow.petCleanlinessBar) {
+        if (value < 30) {
+            gameWindow.petCleanlinessBar.style.background = "red";
+        } else if (value >= 30 && value < 80) {
+            gameWindow.petCleanlinessBar.style.background = "yellow";
+        } else if (value >= 80) {
+            gameWindow.petCleanlinessBar.style.background = "green";
+        }
+    } else if (bar === gameWindow.petHappinessBar) {
+        if (value < 30) {
+            gameWindow.petHappinessBar.style.background = "red";
+            gameWindow.petHappinessIcon.src = "img/madStatus.png";
+        } else if (value >= 30 && value < 80) {
+            gameWindow.petHappinessBar.style.background = "yellow";
+            gameWindow.petHappinessIcon.src = "img/midStatus.png";
+        } else if (value >= 80) {
+            gameWindow.petHappinessBar.style.background = "green";
+            gameWindow.petHappinessIcon.src = "img/happyStatus.png";
+        }
+    } else if (bar == gameWindow.petNeedsBar) {
+        if (value < 50) {
+            gameWindow.petNeedsBar.style.background = "green";
+        } else if (value >= 50 && value < 80) {
+            gameWindow.petNeedsBar.style.background = "yellow";
+        } else if (value >= 80 && value < 100) {
+            gameWindow.petNeedsBar.style.background = "red";
+        } else if (value >= 100) {
+            const endGameMessage = "Your pet wanted to use bathroom badly but you didn't let him."
+            game.end(endGameMessage);
+            return;
+        }
     }
-}
 
-
-
-function updatePetSleepinessBar(value) {
-    const petSleepinessBar = document.querySelector("#sleep-bar");
-    petSleepinessBar.style.width = `${value}%`;
-    if (value < 50) {
-        petSleepinessBar.style.background = "green";
-    } else if (value >= 50 && value < 80) {
-        petSleepinessBar.style.background = "yellow";
-    } else if (value >= 80) {
-        petSleepinessBar.style.background = "red";
-    }
-}
-
-
-
-function updatePetCleanlinessBar(value) {
-    const petCleanlinessBar = document.querySelector("#clean-bar");
-    petCleanlinessBar.style.width = `${value}%`;
-    if (value < 30) {
-        petHungerBar.style.background = "red";
-    } else if (value >= 30 && value < 80) {
-        petHungerBar.style.background = "yellow";
-    } else if (value >= 80) {
-        petHungerBar.style.background = "green";
-    }
-}
-
-function updatePetHappinessBar(value) {
-    const happinessIcon = document.querySelector("#happiness-icon");
-    const petHappinessBar = document.querySelector("#happiness-bar");
-    petHappinessBar.style.width = `${value}%`;
-    if (value < 30) {
-        petHappinessBar.style.background = "red";
-        happinessIcon.src = "img/madStatus.png";
-    } else if (value >= 30 && value < 80) {
-        petHappinessBar.style.background = "yellow";
-        happinessIcon.src = "img/midStatus.png";
-    } else if (value >= 80) {
-        petHappinessBar.style.background = "green";
-        happinessIcon.src = "img/happyStatus.png";
-    }
-}
-
-
-function updatePetNeedsBar(value) {
-    const petNeedsBar = document.querySelector("#toilet-bar");
-    petNeedsBar.style.width = `${value}%`;
-    if (value < 50) {
-        petNeedsBar.style.background = "green";
-    } else if (value >= 50 && value < 80) {
-        petNeedsBar.style.background = "yellow";
-    } else if (value >= 80 && value < 100) {
-        petNeedsBar.style.background = "red";
-    } else if (value >= 100) {
-        const endGameMessage = "Your pet wanted to use bathroom badly but you didn't let him."
-        game.end(endGameMessage);
-        return;
-    }
 }
 
 
@@ -540,7 +528,7 @@ function setPetHunger() {
     petHungerInterval = setInterval(() => {
         let hungerAddValue = (Math.random() * 6) | 0;
         pet.hunger += hungerAddValue;
-        updatePetHungerBar(pet.hunger);
+        updateProgressBar(gameWindow.petHungerBar, pet.hunger);
         if (pet.hunger >= petHungerLoseValue) {
             const endGameMessage = "Pet was too hungry, you lost."
             game.end(endGameMessage);
@@ -553,7 +541,7 @@ function setPetSleepiness() {
     petSleepinessInterval = setInterval(() => {
         let sleepinessAddValue = (Math.random() * 6) | 0;
         pet.sleepiness += sleepinessAddValue;
-        updatePetSleepinessBar(pet.sleepiness);
+        updateProgressBar(gameWindow.petSleepinessBar, pet.sleepiness);
         if (pet.sleepiness >= sleepinessValueToLose) {
             const endGameMessage = "Your pet fell into a coma."
             game.end(endGameMessage);
@@ -564,10 +552,11 @@ function setPetSleepiness() {
 
 
 function setPetCleanliness() {
+    updateProgressBar(gameWindow.petCleanlinessBar, pet.cleanliness);
     petCleanlinessInterval = setInterval(() => {
         let cleanlinessRemoveValue = (Math.random() * 6) | 0;
         pet.cleanliness -= cleanlinessRemoveValue;
-        updatePetCleanlinessBar(pet.cleanliness);
+        updateProgressBar(gameWindow.petCleanlinessBar, pet.cleanliness);
         if (pet.cleanliness <= petCleanlinessLoseValue) {
             const endGameMessage = "Your pet was too dirty, you lost.";
             game.end(endGameMessage);
@@ -580,7 +569,7 @@ function setPetHappiness() {
     petHappinessInterval = setInterval(() => {
         let hapinessRemoveValue = (Math.random() * 6) | 0;
         pet.happiness -= hapinessRemoveValue;
-        updatePetHappinessBar(pet.happiness);
+        updateProgressBar(gameWindow.petHappinessBar, pet.happiness);
         if (pet.happiness <= petHappinessLoseValue) {
             sendInGameMessage("Your pet is miserable! Entertain it!");
             clearInterval(petHappinessInterval);
