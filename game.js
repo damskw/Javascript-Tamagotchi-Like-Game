@@ -479,41 +479,52 @@ function setDay() {
 
 
 function updateProgressBar(bar, value) {
-    bar.style.width = `${value}%`;
     if (bar == gameWindow.petSleepinessBar || bar == gameWindow.petHungerBar) {
         if (value < 50) {
+            gameWindow.petSleepinessBar.style.width = `${value}%`;
             gameWindow.petSleepinessBar.style.background = "green";
         } else if (value >= 50 && value < 80) {
+            gameWindow.petSleepinessBar.style.width = `${value}%`;
             gameWindow.petSleepinessBar.style.background = "yellow";
         } else if (value >= 80) {
+            gameWindow.petSleepinessBar.style.width = `${value}%`;
             gameWindow.petSleepinessBar.style.background = "red";
         }
     } else if (bar == gameWindow.petCleanlinessBar) {
         if (value < 30) {
             gameWindow.petCleanlinessBar.style.background = "red";
+            gameWindow.petCleanlinessBar.style.width = `${value}%`;
         } else if (value >= 30 && value < 80) {
             gameWindow.petCleanlinessBar.style.background = "yellow";
+            gameWindow.petCleanlinessBar.style.width = `${value}%`;
         } else if (value >= 80) {
             gameWindow.petCleanlinessBar.style.background = "green";
+            gameWindow.petCleanlinessBar.style.width = `${value}%`;
         }
     } else if (bar === gameWindow.petHappinessBar) {
         if (value < 30) {
             gameWindow.petHappinessBar.style.background = "red";
             gameWindow.petHappinessIcon.src = "img/madStatus.png";
+            gameWindow.petHappinessBar.style.width = `${value}%`;
         } else if (value >= 30 && value < 80) {
             gameWindow.petHappinessBar.style.background = "yellow";
             gameWindow.petHappinessIcon.src = "img/midStatus.png";
+            gameWindow.petHappinessBar.style.width = `${value}%`;
         } else if (value >= 80) {
             gameWindow.petHappinessBar.style.background = "green";
             gameWindow.petHappinessIcon.src = "img/happyStatus.png";
+            gameWindow.petHappinessBar.style.width = `${value}%`;
         }
     } else if (bar == gameWindow.petNeedsBar) {
         if (value < 50) {
             gameWindow.petNeedsBar.style.background = "green";
+            gameWindow.petNeedsBar.style.width = `${value}%`;
         } else if (value >= 50 && value < 80) {
             gameWindow.petNeedsBar.style.background = "yellow";
+            gameWindow.petNeedsBar.style.width = `${value}%`;
         } else if (value >= 80 && value < 100) {
             gameWindow.petNeedsBar.style.background = "red";
+            gameWindow.petNeedsBar.style.width = `${value}%`;
         } else if (value >= 100) {
             const endGameMessage = "Your pet wanted to use bathroom badly but you didn't let him."
             game.end(endGameMessage);
