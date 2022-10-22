@@ -36,6 +36,7 @@ const game = {
         undragImages();
         initDragAndDrop();
         shuffleInventoryItems();
+        setTimeOfDay();
         game.running();
     },
     running: function () {
@@ -55,6 +56,7 @@ const gameEnvironment = {
     inventoryContainer: null,
     petBackground: null,
     inGameMessage: null,
+    timeOfDay: null,
 }
 
 const gameWindow = {
@@ -97,6 +99,10 @@ function changeDisplayOfInventoryItems(display) {
     }
 }
 
+
+function setTimeOfDay() {
+    gameEnvironment.timeOfDay = "day";
+}
 
 function getBoardReady() {
     changeDisplayOfInventoryItems("hidden");
@@ -405,9 +411,15 @@ function walkThePet() {
         updatePetHappinessBar(pet.happiness);
         sendInGameMessage("You've taken your pet for a walk!")
         gameEnvironment.petBackground.style.backgroundImage = "url('img/Walk2.png')";
-        setTimeout(() => {
-            gameEnvironment.petBackground.style.backgroundImage = "url('img/background -pet.png')"
-        }, 2000);
+        if (gameEnvironment.timeOfDay == "day") {
+            setTimeout(() => {
+                gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet.png')";
+            }, 3000);
+        } else if (gameEnvironment.timeOfDay == "night") {
+            setTimeout(() => {
+                gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.png')";
+            }, 3000);
+        }
     } else {
         sendInGameMessage("Pet is too tired, try again later.")
     }
@@ -437,6 +449,7 @@ function clearInGameMessage() {
 function setNight() {
     const body = document.body;
     body.style.backgroundImage = "url('img/Night-background.jpg')";
+    gameEnvironment.timeOfDay = "night";
     gameEnvironment.petBackground.style.backgroundImage = "url('img/background-pet1.png')";
 
 }
@@ -444,21 +457,10 @@ function setNight() {
 function setDay() {
     const body = document.body;
     body.style.backgroundImage = "url('img/Day-background.png')";
+    gameEnvironment.timeOfDay = "day";
     gameEnvironment.petBackground.style.backgroundImage = "url('img/background -pet.png')";
 }
 
-function walkThePet() {
-    const body = document.body;
-    const petBackground = document.querySelector(".pet-game-content");
-    petBackground.style.backgroundImage = "url('img/Walk2.png')";
-    if (pet.happiness <= minHappinessValueToEntertain) {
-        pet.happiness += addHappinessValue;
-        updatePetHappinessBar(pet.happiness);
-        sendInGameMessage("Yay! You've entertainted your pet!")
-    } else {
-        sendInGameMessage("Pet is too tired, try again later.")
-    }
-}
 
 function updatePetHungerBar(value) {
     const petHungerBar = document.querySelector("#hunger-bar");
@@ -471,6 +473,7 @@ function updatePetHungerBar(value) {
         petHungerBar.style.background = "red";
     }
 }
+
 
 
 function updatePetSleepinessBar(value) {
