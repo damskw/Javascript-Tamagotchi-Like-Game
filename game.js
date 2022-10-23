@@ -370,11 +370,11 @@ function handleDrop(e) {
             if (pet.stage == 2) {
                 updatePetAge();
                 sendInGameMessage("Your pet has evolved! Yay!");
-                changePetImage("img/cat.png", 2);
+                changePetImage("img/small-cat1.png", 2);
             } else if (pet.stage == 3) {
                 updatePetAge();
                 sendInGameMessage("Your pet has evolved! Yay!");
-                changePetImage("img/Pet.png", 1);
+                changePetImage("img/cat.png", 1);
             }
         }
     } else if (draggedAttribute == foodAttribute && pet.hunger < minHungerValueToFeed) {
